@@ -46,6 +46,7 @@ def main():
             raw = strxor(cipher[j], cipher[i])
             # print(raw)
             raw = list(raw)
+            # Replace non-alphabetic characters with '_'
             for k, letter in enumerate(raw):
                 letter = ord(letter)
                 if (letter >= 0x41 and letter <= 0x5a) or (letter >= 0x61 and letter <= 0x7a):
@@ -55,6 +56,36 @@ def main():
             result.append(''.join(raw))
             print(''.join(raw))
 
+        length = min(len(result_string) for result_string in result)  # Ensuring we use the minimum length
+        # print(length)
+
+        plain = ['='] * length
+        for i in range(length):
+            count_ = 0
+            countL = 0
+            mark = ''
+            only = True
+            for letter in [string[i] for string in result]:
+                if letter == '_':
+                    count_ += 1
+                else:
+                    countL += 1
+                    if mark != '' and mark == letter.lower():
+                        pass
+                    elif mark != '' and mark != letter.lower():
+                        only = False
+                    mark = letter.lower()
+                    # print(mark,count_,countL)
+            if countL == 1:
+                plain[i] = mark
+            elif countL > 1:
+                if only:
+                    plain[i] = mark
+            else:
+                plain[i] = '#'
+        # print()
+        print(''.join(plain))
+    
 
 if __name__ == "__main__":
     main()
