@@ -1,5 +1,6 @@
 
 def split_hex(h, dtype='int'):
+    # Split the hex string into a list of integers or strings
     if dtype == 'int':
         split = [int(h[2 * i:2 * i + 2], 16) for i in range(len(h) // 2)]
     elif dtype == 'str' or dtype == 'string':
@@ -7,6 +8,13 @@ def split_hex(h, dtype='int'):
     else:
         split = [int(h[2 * i:2 * i + 2], 16) for i in range(len(h) // 2)]
     return split
+
+def strxor(a, b):
+    # XOR two strings of different lengths
+    if len(a) > len(b):
+        return "".join([chr(ord(x) ^ ord(y)) for (x, y) in zip(a[:len(b)], b)])
+    else:
+        return "".join([chr(ord(x) ^ ord(y)) for (x, y) in zip(a, b[:len(a)])])
 
 def main():
      # define ciphertexts as hex strings
@@ -30,6 +38,22 @@ def main():
         # ['\x16\x01\x11C;\x00\x03_Sa\x10CZ8\x04\x02V\x12@U\\Rn\x1c\x0eC\x13\x00\t\x1eO\x04E\x1d\x1dI\r\x1cI\x01\r\x00\n\nE\x10\x11\x11\x00\x00\rCB\x02\x08\x1f\x07U\x03O\x13\x03\x16\x00\x03\r\x02\x04\x04\x0e']
     # print(cipher)
 
+    for j in range(1,len(ciphertext)):
+        result = []
+        for i in range(1, len(ciphertext)):
+            if i == j:
+                continue
+            raw = strxor(cipher[j], cipher[i])
+            # print(raw)
+            raw = list(raw)
+            for k, letter in enumerate(raw):
+                letter = ord(letter)
+                if (letter >= 0x41 and letter <= 0x5a) or (letter >= 0x61 and letter <= 0x7a):
+                    pass
+                else:
+                    raw[k] = '_'
+            result.append(''.join(raw))
+            print(''.join(raw))
 
 
 if __name__ == "__main__":
